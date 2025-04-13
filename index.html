@@ -2,39 +2,57 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Calculadora De Arain Hex By HEXZAR THE DRAGON </title>
+    <title>Calculadora De Arain Hex By HEXZAR THE DRAGON</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 20px;
             background-color: #f8f8f8;
         }
         h1 {
             color: #2c3e50;
             text-align: center;
+            margin-bottom: 10px;
+        }
+        .logo-img {
+            display: block;
+            margin: 0 auto 30px auto;
+            width: 120px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
         .seccion {
             background: #fff;
             padding: 20px;
             margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+        h2 {
+            color: #34495e;
+            margin-bottom: 10px;
         }
         label {
             display: inline-block;
             margin-right: 10px;
+            margin-bottom: 10px;
         }
         input {
             margin-right: 10px;
-            width: 70px;
+            width: 80px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
         button {
             background-color: #2980b9;
             color: white;
-            padding: 5px 10px;
+            padding: 7px 14px;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #3498db;
@@ -42,12 +60,14 @@
         p {
             margin-top: 10px;
             font-weight: bold;
+            font-size: 1.1em;
         }
     </style>
 </head>
 <body>
 
 <h1>Calculadora De Arain By HEXZAR DRAGON</h1>
+<img class="logo-img" src="https://cdn.discordapp.com/attachments/1017579173784588299/1360788491029446726/Comision_28_10.png?ex=67fc648a&is=67fb130a&hm=7fb7ee9f649e27fe215541a453f56e958dfc015975f7d7084cc6d4df7d87497c&" alt="Hexzar The Dragon Logo">
 
 <div class="seccion">
     <h2>Distribución Binomial</h2>
