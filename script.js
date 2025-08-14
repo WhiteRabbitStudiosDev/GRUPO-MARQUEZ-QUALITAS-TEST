@@ -1,19 +1,28 @@
-$(document).ready(function(){
- 
 
-  $('.valentines-day').click(function(){
-      // Animación de desvanecimiento de los elementos del sobre
-      $('.envelope').css({'animation':'fall 3s linear 1', '-webkit-animation':'fall 3s linear 1'});
-      $('.envelope').fadeOut(800, function() {
-          // Ocultar elementos dentro de .valentines-day
-          $('.valentines-day .heart, .valentines-day .text, .valentines-day .front').hide();
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('cotizacionForm');
 
-          // Hacer visible la carta con una animación ondulante
-          $('#card').css({'visibility':'visible', 'opacity': 0, 'transform': 'scale(0.1)'});
-          $('#card').animate({'opacity': 1}, {duration: 1000, step: function(now, fx) {
-              var scale = 1 + Math.sin(now * Math.PI) * 0.1; // Calculamos la escala basada en la función seno
-              $(this).css('transform', 'scale(' + scale + ')');
-          }}); // Animación de ondulación
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Tomamos todos los datos del formulario
+    const formData = Object.fromEntries(new FormData(form));
+
+    try {
+      // Enviamos al backend que construirá el XML y lo mandará al WS de Quálitas
+      const res = await fetch('/cotizar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
       });
+
+      const data = await res.json();
+      console.log('Respuesta del servidor:', data);
+
+      alert('Cotización realizada. Revisa la consola para más detalles.');
+    } catch (err) {
+      console.error('Error:', err);
+      alert('Ocurrió un error al cotizar.');
+    }
   });
 });
