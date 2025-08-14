@@ -1,14 +1,15 @@
 import express from 'express';
 import fetch from 'node-fetch';
-import { Builder } from 'xml2js';
 
 const app = express();
 app.use(express.json());
 
-// Códigos fijos de ejemplo (ajusta a tu info real)
-const CLAVE_AGENTE = 'AGT12345';
-const CLAVE_AMIS = '05818';
-const PAQUETE = '1';
+// Datos fijos de tu cuenta
+const CLAVE_AGENTE = '69101';
+const NUM_NEGOCIO = '08386 AG_ALEJANDRO_DANIEL_MARQUEZ_CORONA';
+const C_USUARIO = 'LINEA';
+const C_TARIFA = 'LINEA';
+const CLAVE_AMIS = '05818'; // ejemplo, cámbialo según el auto
 
 app.post('/cotizar', async (req, res) => {
   const d = req.body;
@@ -17,49 +18,77 @@ app.post('/cotizar', async (req, res) => {
   fin.setFullYear(fin.getFullYear() + 1);
   const finVigencia = fin.toISOString().split('T')[0];
 
-  // Armamos el objeto XML
-  const xmlObj = {
-    Movimientos: {
-      Movimiento: {
-        $: { TipoMovimiento: '3', NoNegocio: 'WR-TEST-001' },
-        DatosAsegurado: {
-          Nombre: d.nombre,
-          CodigoPostal: d.cp
-        },
-        DatosVehiculo: {
-          ClaveAmis: CLAVE_AMIS,
-          Modelo: d.anio,
-          DescripcionVehiculo: d.modelo,
-          Uso: d.uso,
-          Servicio: d.uso === '2' ? '2' : '1', // Uber/Didi servicio público
-          Paquete: PAQUETE
-        },
-        DatosGenerales: {
-          FechaEmision: hoy,
-          FechaInicio: hoy,
-          FechaTermino: finVigencia,
-          Moneda: '00',
-          Agente: CLAVE_AGENTE,
-          FormaPago: 'C',
-          PorcentajeDescuento: '0',
-          ConsideracionesAdicionalesDG: {
-            $: { NoConsideracion: '32' },
-            TipoRegla: '',
-            ValorRegla: `${d.celular}|No||${d.fecha_nacimiento}|Mexicana|${d.conductor === 'si' ? 'Conductor habitual' : 'No conductor'}||${d.email}|CURPXXXXXXX|RFCXXXXXXX`
-          }
-        }
-      }
-    }
-  };
+  // PLANTILLA XML COMPLETA
+  const xml = `<?xml version="1.0" encoding="utf-8"?>
+<Movimientos>
+  <Movimiento TipoMovimiento="3" NoPoliza="" NoCotizacion="" NoEndoso="" TipoEndoso="" NoOTra="" NoNegocio="${NUM_NEGOCIO}">
+    <DatosAsegurado NoAsegurado="">
+      <Nombre>${d.nombre}</Nombre>
+      <Direccion>Direccion Ejemplo</Direccion>
+      <Colonia>Colonia Ejemplo</Colonia>
+      <Poblacion>Municipio Ejemplo</Poblacion>
+      <Estado>09</Estado>
+      <CodigoPostal>${d.cp}</CodigoPostal>
+    </DatosAsegurado>
 
-  const builder = new Builder({ headless: true });
-  const xml = builder.buildObject(xmlObj);
+    <DatosVehiculo NoInciso="1">
+      <ClaveAmis>${CLAVE_AMIS}</ClaveAmis>
+      <Modelo>${d.anio}</Modelo>
+      <DescripcionVehiculo>${d.modelo}</DescripcionVehiculo>
+      <Uso>${d.uso}</Uso>
+      <Servicio>${d.uso === '2' ? '2' : '1'}</Servicio>
+      <Paquete>1</Paquete>
+      <Motor/>
+      <Serie/>
+      <Coberturas NoCobertura="01">
+        <SumaAsegurada>350000</SumaAsegurada>
+        <TipoSuma>1</TipoSuma>
+        <Deducible>5</Deducible>
+        <Prima>0</Prima>
+      </Coberturas>
+      <Coberturas NoCobertura="03">
+        <SumaAsegurada>350000</SumaAsegurada>
+        <TipoSuma>1</TipoSuma>
+        <Deducible>10</Deducible>
+        <Prima>0</Prima>
+      </Coberturas>
+      <Coberturas NoCobertura="04">
+        <SumaAsegurada>1000000</SumaAsegurada>
+        <TipoSuma>1</TipoSuma>
+        <Prima>0</Prima>
+      </Coberturas>
+    </DatosVehiculo>
 
-  // Petición SOAP al ambiente de pruebas de Quálitas
+    <DatosGenerales>
+      <FechaEmision>${hoy}</FechaEmision>
+      <FechaInicio>${hoy}</FechaInicio>
+      <FechaTermino>${finVigencia}</FechaTermino>
+      <Moneda>00</Moneda>
+      <Agente>${CLAVE_AGENTE}</Agente>
+      <FormaPago>C</FormaPago>
+      <TarifaValores>${C_TARIFA}</TarifaValores>
+      <TarifaCuotas>${C_TARIFA}</TarifaCuotas>
+      <TarifaDerechos>${C_TARIFA}</TarifaDerechos>
+      <PorcentajeDescuento>0</PorcentajeDescuento>
+      <ConsideracionesAdicionalesDG NoConsideracion="32">
+        <TipoRegla/>
+        <ValorRegla>${d.celular}|No||${d.fecha_nacimiento}|Mexicana|${d.conductor === 'si' ? 'Conductor habitual' : 'No conductor'}||${d.email}|CURPXXXXXXX|RFCXXXXXXX</ValorRegla>
+      </ConsideracionesAdicionalesDG>
+    </DatosGenerales>
+
+    <Primas>
+      <Derecho>340</Derecho>
+    </Primas>
+  </Movimiento>
+</Movimientos>`;
+
+  // Envolvemos en SOAP
   const soapEnvelope = `<?xml version="1.0"?>
   <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
     <soap:Body>
       <TuMetodoCotizacion xmlns="http://tempuri.org/">
+        <cUsuario>${C_USUARIO}</cUsuario>
+        <cTarifa>${C_TARIFA}</cTarifa>
         <xml>${xml}</xml>
       </TuMetodoCotizacion>
     </soap:Body>
