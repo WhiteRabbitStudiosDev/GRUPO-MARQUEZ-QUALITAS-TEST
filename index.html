@@ -1,46 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-<link rel="icon" type="image/png" href="favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<form id="cotizacionForm">
+  <label>Año del auto:</label>
+  <input type="number" name="anio" min="1980" max="2025" required><br>
 
-  <title>Carta Para Mi Mama GABY</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <label>Modelo del auto:</label>
+  <input type="text" name="modelo" required><br>
 
-  <link rel="stylesheet" href="./style.css">
-</head>
-<body>
-<div class="valentines-day">
-  <div class="envelope"></div>
-  <div class="heart"></div>
-  <div class="text">Feliz <br>Dia <br>De<br>Las Madres!! </div>
-  <div class="front"></div>
-</div>
+  <label>Uso del vehículo:</label>
+  <select name="uso" required>
+    <option value="1">Personal</option>
+    <option value="2">Uber</option>
+    <option value="3">Comercial</option>
+    <option value="4">Fronterizo</option>
+  </select><br>
 
-<div id="card">
-  <div class="side one">
-    <i class="fas fa-heart"></i>
-  </div>
-  <div class="side two">
-   
-<p>Mami,</p>
-<p>Hoy quiero recordarte lo mucho que te amo. Eres mi fuerza, mi ejemplo y mi lugar seguro. Gracias por tu amor incondicional, por apoyarme siempre (incluso en mis locuras como White Rabbit), y por enseñarme todo… hasta usar la lavadora, la neta.</p>
-<p>Feliz Día de la Madre, mamá. Te amo con todo mi corazón (y prometo que esta semana sí trapeo... ahora sí de verdad).</p>
+  <label>¿Eres el conductor?</label>
+  <select name="conductor" required>
+    <option value="si">Sí</option>
+    <option value="no">No</option>
+  </select><br>
 
-     <h2>TU HIJO ALAN</h2>
-  </div>
-</div>
+  <label>Sexo de nacimiento:</label>
+  <select name="sexo" required>
+    <option value="M">Masculino</option>
+    <option value="F">Femenino</option>
+  </select><br>
 
-<div class='made-with-love'>
-  Todos los derechos reservados.
-   <span>♥</span>
-  © 2025 HEXZAR DRAGON & WHITE RABBIT STUDIOS™
+  <label>Fecha de nacimiento:</label>
+  <input type="date" name="fecha_nacimiento" required><br>
 
+  <label>Código postal:</label>
+  <input type="text" name="cp" required><br>
 
-</div>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-<script src="./script.js"></script>
+  <label>Nombre completo:</label>
+  <input type="text" name="nombre" required><br>
 
-</body>
-</html>
+  <label>Email:</label>
+  <input type="email" name="email" required><br>
+
+  <label>Celular:</label>
+  <input type="tel" name="celular" required><br>
+
+  <button type="submit">Cotizar</button>
+</form>
+
+<script>
+  document.getElementById('cotizacionForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target));
+    const res = await fetch('/cotizar', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+    console.log(result);
+  });
+</script>
