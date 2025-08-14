@@ -1,58 +1,58 @@
-<form id="cotizacionForm">
-  <label>Año del auto:</label>
-  <input type="number" name="anio" min="1980" max="2025" required><br>
+<!-- cotizacion.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cotización Seguros</title>
+</head>
+<body>
+  <form id="cotizacionForm">
+    <label>Año del auto:</label>
+    <input type="number" name="anio" min="1980" max="2025" required><br>
 
-  <label>Modelo del auto:</label>
-  <input type="text" name="modelo" required><br>
+    <label>Modelo del auto:</label>
+    <input type="text" name="modelo" required><br>
 
-  <label>Uso del vehículo:</label>
-  <select name="uso" required>
-    <option value="1">Personal</option>
-    <option value="2">Uber</option>
-    <option value="3">Comercial</option>
-    <option value="4">Fronterizo</option>
-  </select><br>
+    <label>Uso del vehículo:</label>
+    <select name="uso" required>
+      <option value="1">Personal</option>
+      <option value="2">Uber/Didi</option>
+      <option value="3">Comercial</option>
+      <option value="4">Fronterizo</option>
+    </select><br>
 
-  <label>¿Eres el conductor?</label>
-  <select name="conductor" required>
-    <option value="si">Sí</option>
-    <option value="no">No</option>
-  </select><br>
+    <label>¿Eres el conductor?</label>
+    <select name="conductor" required>
+      <option value="si">Sí</option>
+      <option value="no">No</option>
+    </select><br>
 
-  <label>Sexo de nacimiento:</label>
-  <select name="sexo" required>
-    <option value="M">Masculino</option>
-    <option value="F">Femenino</option>
-  </select><br>
+    <label>Sexo de nacimiento:</label>
+    <select name="sexo" required>
+      <option value="M">Masculino</option>
+      <option value="F">Femenino</option>
+    </select><br>
 
-  <label>Fecha de nacimiento:</label>
-  <input type="date" name="fecha_nacimiento" required><br>
+    <label>Fecha de nacimiento:</label>
+    <input type="date" name="fecha_nacimiento" required><br>
 
-  <label>Código postal:</label>
-  <input type="text" name="cp" required><br>
+    <label>Código postal:</label>
+    <input type="text" name="cp" required><br>
 
-  <label>Nombre completo:</label>
-  <input type="text" name="nombre" required><br>
+    <label>Nombre completo:</label>
+    <input type="text" name="nombre" required><br>
 
-  <label>Email:</label>
-  <input type="email" name="email" required><br>
+    <label>Email:</label>
+    <input type="email" name="email" required><br>
 
-  <label>Celular:</label>
-  <input type="tel" name="celular" required><br>
+    <label>Celular:</label>
+    <input type="tel" name="celular" required><br>
 
-  <button type="submit">Cotizar</button>
-</form>
+    <button type="submit">Cotizar</button>
+  </form>
 
-<script>
-  document.getElementById('cotizacionForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.target));
-    const res = await fetch('/cotizar', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(data)
-    });
-    const result = await res.json();
-    console.log(result);
-  });
-</script>
+  <!-- Aquí cargamos el JS -->
+  <script src="cotizacionForm.js"></script>
+</body>
+</html>
